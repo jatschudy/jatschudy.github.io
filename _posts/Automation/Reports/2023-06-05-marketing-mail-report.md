@@ -1,7 +1,7 @@
 ---
 title: Marketing Mail Report
 date: 2023-06-04 20:00:00 -0500
-categories: [Automation,Power Automate]
+categories: [Automation,Reports]
 tags: [automate,powershell,automation,script]
 ---
 
