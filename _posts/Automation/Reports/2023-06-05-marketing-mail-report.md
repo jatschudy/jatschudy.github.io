@@ -10,6 +10,9 @@ Run once for each account wanted.  It will compile all emails sent from that acc
 ```powershell
 # Log in to Exchange
 Connect-ExchangeOnline
+```
+
+```powershell
 #arrayMarketing variable is stored in powershell launch profile
 $i = 1
 
