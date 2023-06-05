@@ -1,5 +1,5 @@
 ---
-title: Record Auditor
+title: Marketing Mail Report
 date: 2023-06-04 20:00:00 -0500
 categories: [Automation,Power Automate]
 tags: [automate,powershell,automation,script]
