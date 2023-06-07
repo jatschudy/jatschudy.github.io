@@ -10,10 +10,9 @@ Run once for each account wanted.  It will compile all emails sent from that acc
 ```powershell
 # Log in to Exchange
 Connect-ExchangeOnline
-```
 
-```powershell
 #arrayMarketing variable is stored in powershell launch profile
+
 $i = 1
 
 foreach ($item in $arrayMarketing) {
@@ -27,7 +26,7 @@ $maxPage = 1000
 
 # Logging
 $logEveryXPages = 1
-$outFilePath = ".\messageTrace.csv"
+$outFilePath = ".\OneDrive - IGI Global\Automation\\Marketing Mailer\messageTrace.csv"
 
 # Initialize message variable
 $allMessages = @()
