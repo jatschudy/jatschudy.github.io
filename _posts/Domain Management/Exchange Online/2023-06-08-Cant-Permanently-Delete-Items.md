@@ -8,6 +8,11 @@ tags: [exchange,exo,powershell,script,email management]
 ### Scenario
 The user is unable to delete email from their mailbox.  Any attempt to do so produces a message stating "You can't permanently delete these items" and informs them to try deleting the "Recoverable Items" folder.  Emptying that folder does not help.
 
+### Order of Execution
+1. Run the first script to remove recovery capability.
+2. Log into the email with OWA and delete the desired emails
+3. Run the second script to restore the account to default configuration.
+
 ### Reduce Recovery Capability
 Once done deleting you will want to return these settings to their original state
 
@@ -22,7 +27,7 @@ get-mailbox $MAILBOX | FL SingleItemRecoveryEnabled,RetainDeletedItemsFor
 $CONFIRM = read-host -Prompt "Do you want to change this user's settings? Y/N"
 
 if ($CONFIRM -match "Y") {
-    Set-Mailbox $MAILBOX -RetainDeletedItemsFor 1.00:00:00
+    Set-Mailbox $MAILBOX -RetainDeletedItemsFor 0.00:00:00
     Set-Mailbox $MAILBOX -SingleItemRecoveryEnabled $False
     Start-ManagedFolderAssistant $MAILBOX
     get-mailbox $MAILBOX | FL SingleItemRecoveryEnabled,RetainDeletedItemsFor
