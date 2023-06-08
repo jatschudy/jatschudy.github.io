@@ -21,13 +21,12 @@ $MAILBOX = read-host -Prompt "Enter the user's email address"
 get-mailbox $MAILBOX | FL SingleItemRecoveryEnabled,RetainDeletedItemsFor
 $CONFIRM = read-host -Prompt "Do you want to change this user's settings? Y/N"
 
-if ($CONFIRM -match "Y") -or ($CONFIRM -match "y") {
+if ($CONFIRM -match "Y") {
     Set-Mailbox $MAILBOX -RetainDeletedItemsFor 1.00:00:00
     Set-Mailbox $MAILBOX -SingleItemRecoveryEnabled $False
     Start-ManagedFolderAssistant $MAILBOX
     get-mailbox $MAILBOX | FL SingleItemRecoveryEnabled,RetainDeletedItemsFor
-}
-else {
+} else {
     write-host "No changes have been made."
 }
 ```
@@ -43,13 +42,12 @@ $MAILBOX = read-host -Prompt "Enter the user's email address"
 get-mailbox $MAILBOX | FL SingleItemRecoveryEnabled,RetainDeletedItemsFor
 $CONFIRM = read-host -Prompt "Do you want to change this user's settings? Y/N"
 
-if ($CONFIRM -match "Y") -or ($CONFIRM -match "y") {
+if ($CONFIRM -match "Y") {
     Set-Mailbox $MAILBOX -RetainDeletedItemsFor 14.00:00:00
     Set-Mailbox $MAILBOX -SingleItemRecoveryEnabled $True
     Start-ManagedFolderAssistant $MAILBOX
     get-mailbox $MAILBOX | FL SingleItemRecoveryEnabled,RetainDeletedItemsFor
-}
-else {
+} else {
     write-host "No changes have been made."
 }
 ```
