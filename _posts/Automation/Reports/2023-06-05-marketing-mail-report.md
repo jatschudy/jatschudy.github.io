@@ -5,6 +5,7 @@ categories: [Automation,Reports]
 tags: [automate,powershell,automation,script]
 ---
 
+
 ### Collect email from last 7 days
 Run once for each account wanted.  It will compile all emails sent from that account and append them to a csv. Automating this to run on Saturday would be ideal but Connect-ExchangeOnline does not work correctly without initial user input.
 ```powershell
