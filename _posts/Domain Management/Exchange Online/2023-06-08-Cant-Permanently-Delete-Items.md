@@ -1,6 +1,6 @@
 ---
 title: Can't Permanently Delete Items
-date: 2023-06-08 08:15:00 -0500
+date: 2023-06-07 08:15:00 -0500
 categories: [Domain Management,Exchange Online]
 tags: [exchange,exo,powershell,script,email management]
 ---
