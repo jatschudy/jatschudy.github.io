@@ -21,13 +21,13 @@ write-host ("Starting trace of $item")
 # Set Parameters
 $SEND = $item
 $endDate = (Get-Date).Date
-$startDate = ($endDate).AddDays(-7)
+$startDate = ($endDate).AddDays(-6)
 $pageSize = 5000
 $maxPage = 1000
 
 # Logging
 $logEveryXPages = 1
-$outFilePath = ".\OneDrive - IGI Global\Automation\\Marketing Mailer\messageTrace.csv"
+$outFilePath = ".\OneDrive - IGI Global\Automation\Global Chimp\messageTrace.csv"
 
 # Initialize message variable
 $allMessages = @()
@@ -68,7 +68,7 @@ do {
 ### Message Trace
 This will read through all records exported in the previous step and create a file with the details in a folder called "report".  These are used later in power automate.
 ```powershell
-$csv = Import-CSV ".\messageTrace.csv"
+$csv = Import-CSV ".\OneDrive - IGI Global\Automation\Global Chimp\messageTrace.csv"
 $totalmbx = $csv.Count
 $i = 0
 $endDate = (Get-Date).Date
@@ -78,7 +78,7 @@ foreach ($RECORD in $csv) {
 	
 	$DATA = Get-MessageTraceDetail -MessageTraceID $RECORD.MessageTraceId -RecipientAddress $RECORD.RecipientAddress -StartDate $startDate -EndDate $endDate | select Event,Detail
 	$name = $RECORD.MessageTraceId
-	$DATA | Export-Csv -Path ".\report\$name.txt"
+	$DATA | Export-Csv -Path ".\OneDrive - IGI Global\Automation\Global Chimp\report\$name.txt"
 	$i++
 	Write-Host "Progress: $i out of $totalmbx completed"
 }
