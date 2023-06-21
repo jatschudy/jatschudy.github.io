@@ -7,7 +7,7 @@ tags: [hypervisor,hyperv,hyper-v,powershell,script,virtualization]
 
 ### Install HyperV Role and Management Tools on Server
 ```powershell
-Install-WindowsFeature -Name Hyper-V -IncludeManagementTools -Restart
+Install-WindowsFeature -Name Hyper-V -IncludeAllSubFeature -IncludeManagementTools -Restart
 Add-WindowsFeature rsat-Hyper-V-tools
 Install-WindowsFeature -Name Falover-Clustering -Restart
 Restart-Computer
