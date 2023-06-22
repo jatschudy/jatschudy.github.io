@@ -1,0 +1,5 @@
+- hosts: "Webservers"
+  become: yes
+  tasks:
+  - name: Deploy Website
+    copy: src=_site/ dest=/home/dev/sites/pugsnot.org
