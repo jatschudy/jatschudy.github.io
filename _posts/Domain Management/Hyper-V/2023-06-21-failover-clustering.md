@@ -27,7 +27,7 @@ $SERVER = Read-Host -Prompt "Enter Server Names S1, S2, S3..."
 - **LB**: Least Blocks.
 
 ```powershell
-$SERVER = Read-Host -Prompt "Enter Server Names S1, S2, S3..."
+$SERVER = Read-Host -Prompt "Enter Server Names S1,S2,S3..."
 Invoke-Command -ComputerName $SERVER -ScriptBlock {
     Enable-MSDSMAutomaticClaim -BusType iSCSI
     Set-MSDSMGlobalDefaultLoadbalancePolicy -Policy FOO
@@ -40,17 +40,20 @@ Invoke-Command -ComputerName $SERVER -ScriptBlock {
 ### Configure iSCSI Service
 *Connect to iSCSI Portal and list get target addresses*
 ```powershell
-$SERVER = Read-Host -Prompt "Enter Server Names S1, S2, S3..."
-Invoke-Command -ComputerName $SERVER -ScriptBlock {Set-Service -Name msiscsi -StartupType "Automatic" ; Start-Service msiscsi}
-Invoke-Command -ComputerName $SERVER -ScriptBlock {New-iscsitargetportal -TargetPortalAddress 192.168.1.2}
-Invoke-Command -ComputerName $SERVER -ScriptBlock {Get-IscsiTargetPortal | Update-IscsiTargetPortal}
-Invoke-Command -ComputerName $SERVER -ScriptBlock {Get-IscsiTarget}
+$SERVER = Read-Host -Prompt "Enter Server Names S1,S2,S3..."
+Invoke-Command -ComputerName $SERVER -ScriptBlock {
+    Set-Service -Name msiscsi -StartupType "Automatic"
+    Start-Service msiscsi
+    New-iscsitargetportal -TargetPortalAddress 192.168.1.2
+    Get-IscsiTargetPortal | Update-IscsiTargetPortal
+    Get-IscsiTarget
+}
 
 ```
 
-**Make the Connections**
+*Make the Connections*
 ```powershell
-$SERVER = Read-Host -Prompt "Enter Server Names S1, S2, S3..."
+$SERVER = Read-Host -Prompt "Enter Server Names S1,S2,S3..."
 Invoke-Command -ComputerName $SERVER -ScriptBlock {
     $ipAddress = (Get-NetIPAddress | Where-Object {$_.AddressState -eq "Preferred" -and $_.ValidLifetime -lt "24:00:00"}).IPAddress
     $targetAddress = '192.168.1.2'
@@ -63,3 +66,11 @@ Invoke-Command -ComputerName $SERVER -ScriptBlock {
 ```
 
 ### Enable Format Drives
+*Use Remote Desktop to access one of the nodes to do the following steps.  If all prior steps were followed, these steps only need performed on one node.*
+1. Open RDP and remote to one of the nodes
+2. Get to command line
+3. Enter diskpart
+4. lis dis (list disks)
+```powershell
+
+```
