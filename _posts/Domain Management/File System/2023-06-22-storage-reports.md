@@ -5,15 +5,15 @@ categories: [Domain Management,File System]
 tags: [powershell,script,file server,file system,storage use]
 ---
 
-### Get a report on a directory showing file sizes
+### List size of each directory at the entered path
 *Use this one if you have environment variables set*
 ```powershell
 Enter-PSSession -ComputerName $env.PRIMARY_FS
 $PATH = Read-Host -Prompt "Enter Directory Path"
-gci -force $PATH -ErrorAction SilentlyContinue | ? { $_ -is [io.directoryinfo] } | % { 
-    $len = 0
-    gci -recurse -force $_.fullname -ErrorAction SilentlyContinue | % { $len += $_.length }
-    $_.fullname, '{0:N2}' GB' -f ($len /1Gb)
+$ARRAY = Get-ChildItem -Path $PATH | Where-Object {$_.PSIsContainer -eq $true}
+foreach ($item in $ARRAY) {
+    write-host $item
+    "{0:N2} GB" -f ((gci $PATH/$item -Recurse -ErrorAction SilentlyContinue | measure Length -s).sum /1Gb)
 }
 
 ```
@@ -22,6 +22,10 @@ gci -force $PATH -ErrorAction SilentlyContinue | ? { $_ -is [io.directoryinfo] }
 $SERVER = Read-Host -Prompt "Enter Server Name"
 Enter-PSSession -ComputerName $SERVER
 $PATH = Read-Host -Prompt "Enter Directory Path"
-"{0:N2} GB" -f ((gci $PATH -Recurse -ErrorAction SilentlyContinue | measure Length -s).sum /1Gb)
+$ARRAY = Get-ChildItem -Path $PATH | Where-Object {$_.PSIsContainer -eq $true}
+foreach ($item in $ARRAY) {
+    write-host $item
+    "{0:N2} GB" -f ((gci $PATH/$item -Recurse -ErrorAction SilentlyContinue | measure Length -s).sum /1Gb)
+}
 
 ```
