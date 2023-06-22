@@ -1,6 +1,6 @@
 ---
 title: Storage Report
-date: 2023-06-22 20:00:00 -0500
+date: 2023-06-22 08:00:00 -0500
 categories: [Domain Management,File System]
 tags: [powershell,script,file server,file system,storage use]
 ---
