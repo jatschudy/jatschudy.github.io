@@ -12,7 +12,7 @@ $SERVER = Read-Host -Prompt "Enter Server Names S1, S2, S3..."
     Invoke-Command -ComputerName $SERVER -ScriptBlock {
     Install-WindowsFeature -Name Failover-Clustering -Restart
     Enable-WindowsOptionalFeature -Online -FeatureName MultiPathIO -Restart
-    Restart-Computer
+    Restart-Computer -force
 }
 
 ```
@@ -29,10 +29,10 @@ $SERVER = Read-Host -Prompt "Enter Server Names S1, S2, S3..."
 ```powershell
 $SERVER = Read-Host -Prompt "Enter Server Names S1,S2,S3..."
 Invoke-Command -ComputerName $SERVER -ScriptBlock {
-    Enable-MSDSMAutomaticClaim -BusType iSCSI
+    Enable-MSDSMAutomaticClaim -BusType "iSCSI"
     Set-MSDSMGlobalDefaultLoadbalancePolicy -Policy FOO
     Set-MPIOSetting -NewPathVerificationState Enabled
-    Restart-Computer
+    Restart-Computer -force
 }
 
 ```
