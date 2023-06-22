@@ -8,11 +8,12 @@ tags: [hypervisor,hyperv,hyper-v,powershell,script,virtualization,failover,clust
 ### Install Necessary Features
 *Installs the failover clustering and enables the MultiPathIO features.  Upon completion, server will restart.*
 ```powershell
-$SERVER = Read-Host -Prompt "Enter Server Name: "
-Enter-PSSession -ComputerName $SERVER
-Install-WindowsFeature -Name Failover-Clustering -Restart
-Enable-WindowsOptionalFeature -Online -FeatureName MultiPathIO -Restart
-Restart-Computer
+$SERVER = Read-Host -Prompt "Enter Server Names S1, S2, S3..."
+    Invoke-Command -ComputerName $SERVER -ScriptBlock {
+    Install-WindowsFeature -Name Failover-Clustering -Restart
+    Enable-WindowsOptionalFeature -Online -FeatureName MultiPathIO -Restart
+    Restart-Computer
+}
 
 ```
 
@@ -26,12 +27,39 @@ Restart-Computer
 - **LB**: Least Blocks.
 
 ```powershell
-$SERVER = Read-Host -Prompt "Enter Server Name: "
-Enter-PSSession -ComputerName $SERVER
-$POLICY = Read-Host -Prompt "Enter Failover Policy"
-Enable-MSDSMAutomaticClaim -BusType iSCSI
-Set-MSDSMGlobalDefaultLoadbalancePolicy -Policy $POLICY
-Set-MPIOSetting -NewPathVerificationState Enabled
-Restart-Computer
+$SERVER = Read-Host -Prompt "Enter Server Names S1, S2, S3..."
+Invoke-Command -ComputerName $SERVER -ScriptBlock {
+    Enable-MSDSMAutomaticClaim -BusType iSCSI
+    Set-MSDSMGlobalDefaultLoadbalancePolicy -Policy FOO
+    Set-MPIOSetting -NewPathVerificationState Enabled
+    Restart-Computer
+}
 
 ```
+
+### Configure iSCSI Service
+*Connect to iSCSI Portal and list get target addresses*
+```powershell
+$SERVER = Read-Host -Prompt "Enter Server Names S1, S2, S3..."
+Invoke-Command -ComputerName $SERVER -ScriptBlock {Set-Service -Name msiscsi -StartupType "Automatic" ; Start-Service msiscsi}
+Invoke-Command -ComputerName $SERVER -ScriptBlock {New-iscsitargetportal -TargetPortalAddress 192.168.1.2}
+Invoke-Command -ComputerName $SERVER -ScriptBlock {Get-IscsiTargetPortal | Update-IscsiTargetPortal}
+Invoke-Command -ComputerName $SERVER -ScriptBlock {Get-IscsiTarget}
+
+```
+
+**Make the Connections**
+```powershell
+$SERVER = Read-Host -Prompt "Enter Server Names S1, S2, S3..."
+Invoke-Command -ComputerName $SERVER -ScriptBlock {
+    $ipAddress = (Get-NetIPAddress | Where-Object {$_.AddressState -eq "Preferred" -and $_.ValidLifetime -lt "24:00:00"}).IPAddress
+    $targetAddress = '192.168.1.2'
+    Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:quorum -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
+    Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:storage -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
+}
+Invoke-Command -ComputerName $SERVER -ScriptBlock {
+    Get-iSCSIsession | Register-iSCSIsession
+}
+```
+
+### Enable Format Drives

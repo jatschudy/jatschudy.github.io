@@ -13,7 +13,7 @@ $PATH = Read-Host -Prompt "Enter Directory Path"
 $ARRAY = Get-ChildItem -Path $PATH | Where-Object {$_.PSIsContainer -eq $true}
 foreach ($item in $ARRAY) {
     $RESULT = "{0:N2} GB" -f ((gci $PATH/$item -Recurse -ErrorAction SilentlyContinue | measure Length -s).sum /1Gb)
-    write-host $item $RESULT
+    write-host $item";"$RESULT
 }
 
 ```
