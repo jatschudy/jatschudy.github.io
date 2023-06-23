@@ -73,10 +73,11 @@ Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock{Get-iSCSITarget}
 *You are now in diskpart.  The following commands will be repeated for each drive you need to format.  '#' will stand in for the disk number as this may vary.  Be careful not to format the wrong disk.*
 1. list disk
 2. Select Disk #
-3. attributes disk clear readonly
-4. clean
-5. create partition primary
-6. format fs=ntfs
+3. online disk
+4. attributes disk clear readonly
+5. clean
+6. create partition primary
+7. format fs=ntfs
 
 *Label the drive with these commands. '#' represents the correct letter.*
 1. Exit
