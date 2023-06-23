@@ -8,7 +8,7 @@ tags: [hypervisor,hyperv,hyper-v,powershell,script,virtualization,failover,clust
 ### Install Necessary Features
 *Installs the failover clustering and enables the MultiPathIO features.  Upon completion, server will restart.*
 ```powershell
-Invoke-Command -ComputerName HYPERV-TEST-01,HYPERV-TEST-02 -ScriptBlock {
+Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {
     Install-WindowsFeature -Name Failover-Clustering -Restart
     Enable-WindowsOptionalFeature -Online -FeatureName MultiPathIO
     Restart-Computer -force
@@ -26,7 +26,7 @@ Invoke-Command -ComputerName HYPERV-TEST-01,HYPERV-TEST-02 -ScriptBlock {
 - **LB**: Least Blocks.
 
 ```powershell
-Invoke-Command -ComputerName HYPERV-TEST-01,HYPERV-TEST-02 -ScriptBlock {
+Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {
     Enable-MSDSMAutomaticClaim -BusType "iSCSI"
     Set-MSDSMGlobalDefaultLoadbalancePolicy -Policy FOO
     Set-MPIOSetting -NewPathVerificationState Enabled
@@ -38,7 +38,7 @@ Invoke-Command -ComputerName HYPERV-TEST-01,HYPERV-TEST-02 -ScriptBlock {
 ### Configure iSCSI Service
 *Connect to iSCSI Portal and list get target addresses*
 ```powershell
-Invoke-Command -ComputerName HYPERV-TEST-01,HYPERV-TEST-02 -ScriptBlock {
+Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {
     Set-Service -Name msiscsi -StartupType "Automatic"
     Start-Service msiscsi
     New-iscsitargetportal -TargetPortalAddress 192.168.1.2
@@ -50,16 +50,16 @@ Invoke-Command -ComputerName HYPERV-TEST-01,HYPERV-TEST-02 -ScriptBlock {
 
 *Make the Connections*
 ```powershell
-Invoke-Command -ComputerName HYPERV-TEST-01,HYPERV-TEST-02 -ScriptBlock {
+Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {
     $ipAddress = (Get-NetIPAddress | Where-Object {$_.AddressState -eq "Preferred" -and $_.ValidLifetime -lt "24:00:00"}).IPAddress
     $targetAddress = '192.168.1.2'
     Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:quorum -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
     Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:storage -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
 }
-Invoke-Command -ComputerName HYPERV-TEST-01,HYPERV-TEST-02 -ScriptBlock {
+Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {
     Get-iSCSIsession | Register-iSCSIsession
 }
-Invoke-Command -ComputerName HYPERV-TEST-01,HYPERV-TEST-02 -ScriptBlock {Get-IscsiTarget}
+Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {Get-IscsiTarget}
 
 ```
 
@@ -75,3 +75,10 @@ Invoke-Command -ComputerName HYPERV-TEST-01,HYPERV-TEST-02 -ScriptBlock {Get-Isc
 3. clean
 4. create partition primary
 5. format fs=ntfs
+
+*Label the drive with these commands. '#' represents the correct letter.*
+1. Exit
+2. Powershell
+3. Start-Process Powershell -Verb RunAs
+4. Get-Volume
+5. Set-Volume -DriveLetter # -NewFileSystemLabel "LABELNAME"
