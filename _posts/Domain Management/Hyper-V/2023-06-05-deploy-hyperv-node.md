@@ -5,17 +5,20 @@ categories: [Domain Management,Hyper-V]
 tags: [hypervisor,hyperv,hyper-v,powershell,script,virtualization]
 ---
 
-### Install HyperV Role and Management Tools on Server
-*Seems to work better if the two are run seperately*
+### Setup HyperV Host
+*Run on HyperV Server*
 ```powershell
-Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {Install-WindowsFeature -Name Hyper-V -IncludeAllSubFeature -IncludeManagementTools -Restart}
-```
-```powershell
-    Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {Add-WindowsFeature rsat-Hyper-V-tools}
+$SERVER = Read-Host -Prompt "Enter server name"
+Enter-PSSession -ComputerName $SERVER
+Install-WindowsFeature -Name Hyper-V -IncludeAllSubFeature -IncludeManagementTools -Restart
+Add-WindowsFeature rsat-Hyper-V-tools
+write-host "Computer will restart"
+pause
+Restart-Computer
 ```
 
 ### Install HyperV Management Tools on Workstation
+*Do not run this on the server*
 ```powershell
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
-
 ```
