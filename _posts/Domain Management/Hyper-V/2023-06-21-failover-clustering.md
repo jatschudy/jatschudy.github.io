@@ -5,15 +5,20 @@ categories: [Domain Management,Hyper-V]
 tags: [hypervisor,hyperv,hyper-v,powershell,script,virtualization,failover,cluster]
 ---
 
-### Install Necessary Features
-*Installs the failover clustering and enables the MultiPathIO features.  Upon completion, server will restart.*
+### Connect to a server
+*After restarts or disconnects you will need to connect again*
 ```powershell
-Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {
-    Install-WindowsFeature -Name Failover-Clustering -Restart
-    Enable-WindowsOptionalFeature -Online -FeatureName MultiPathIO
-    Restart-Computer -force
-}
+$SERVER = Read-Host -Prompt "Enter server name"
+Enter-PSSession -ComputerName $SERVER
+```
 
+### Install Necessary Features
+*Installs the failover clustering and enables the MultiPathIO features.*
+```Powershell
+Install-WindowsFeature -Name Failover-Clustering -Restart
+```
+```powershell
+Enable-WindowsOptionalFeature -Online -FeatureName MultiPathIO
 ```
 
 ### Install HyperV Management Tools on Workstation
@@ -26,41 +31,37 @@ Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {
 - **LB**: Least Blocks.
 
 ```powershell
-Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {
-    Enable-MSDSMAutomaticClaim -BusType "iSCSI"
-    Set-MSDSMGlobalDefaultLoadbalancePolicy -Policy FOO
-    Set-MPIOSetting -NewPathVerificationState Enabled
-    Restart-Computer -force
-}
-
+$POLICY = Read-Host -Prompt "Enter Policy Option"
+Enable-MSDSMAutomaticClaim -BusType "iSCSI"
+Set-MSDSMGlobalDefaultLoadbalancePolicy -Policy $POLICY
+Set-MPIOSetting -NewPathVerificationState Enabled
+Restart-Computer
 ```
 
 ### Configure iSCSI Service
 *Connect to iSCSI Portal and list get target addresses*
 ```powershell
-Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {
-    Set-Service -Name msiscsi -StartupType "Automatic"
-    Start-Service msiscsi
-    New-iscsitargetportal -TargetPortalAddress 192.168.1.2
-    Get-IscsiTargetPortal | Update-IscsiTargetPortal
-    Get-IscsiTarget
-}
-
+Set-Service -Name msiscsi -StartupType "Automatic"
+Start-Service msiscsi
+$targetAddress = Read-Host -Prompt "Enter Target IP Address"
+New-iscsitargetportal -TargetPortalAddress $targetAddress
+Get-IscsiTargetPortal | Update-IscsiTargetPortal
+Get-IscsiTarget
 ```
 
 *Make the Connections*
 ```powershell
-Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {
-    $ipAddress = (Get-NetIPAddress | Where-Object {$_.AddressState -eq "Preferred" -and $_.ValidLifetime -lt "24:00:00"}).IPAddress
-    $targetAddress = '192.168.1.2'
-    Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:quorum -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
-    Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:storage -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
-}
-Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {
-    Get-iSCSIsession | Register-iSCSIsession
-}
-Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {Get-IscsiTarget}
+$ipAddress = Read-Host -Prompt "Enter Initiator Address"
+$targetAddress = Read-Host -Prompt "Enter Target IP Address"
+Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:quorum -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
+Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:storage -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
+Get-iSCSIsession | Register-iSCSIsession
+Get-iSCSITarget
+```
 
+### Check Connections for All Nodes
+```powershell
+Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock{Get-iSCSITarget}
 ```
 
 ### Enable Format Drives
@@ -72,9 +73,10 @@ Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock {Get-IscsiTarget}
 *You are now in diskpart.  The following commands will be repeated for each drive you need to format.  '#' will stand in for the disk number as this may vary.  Be careful not to format the wrong disk.*
 1. list disk
 2. Select Disk #
-3. clean
-4. create partition primary
-5. format fs=ntfs
+3. attributes disk clear readonly
+4. clean
+5. create partition primary
+6. format fs=ntfs
 
 *Label the drive with these commands. '#' represents the correct letter.*
 1. Exit
