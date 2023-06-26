@@ -1,27 +1,35 @@
 ---
-title: Failover Clustering
-date: 2023-06-21 20:00:00 -0500
+title: Deploy HyperV Cluster
+date: 2023-06-04 20:00:00 -0500
 categories: [Domain Management,Hyper-V]
-tags: [hypervisor,hyperv,hyper-v,powershell,script,virtualization,failover,cluster]
+tags: [hypervisor,hyperv,hyper-v,powershell,script,virtualization]
 ---
 
-### Connect to a server
+### Notes
+This guide assumes you already have a server OS installed, have assigned it a static IP and joined it to a domain.
+
+*You will need HyperV Tools on your workstation.* ***DO NOT RUN ON SERVER***
+```powershell
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+```
+
 *After restarts or disconnects you will need to connect again*
 ```powershell
 $SERVER = Read-Host -Prompt "Enter server name"
 Enter-PSSession -ComputerName $SERVER
 ```
 
-### Install Necessary Features
-*Installs the failover clustering and enables the MultiPathIO features.*
-```Powershell
-Install-WindowsFeature -Name Failover-Clustering -Restart
-```
+*Alternatively, use this to create an array for invoke commands.  I have this in my powershell initial startup script.*
 ```powershell
-Enable-WindowsOptionalFeature -Online -FeatureName MultiPathIO
+$arrayHV = @("NODE01","NODE02","NODE03")
 ```
 
-### Install HyperV Management Tools on Workstation
+*I found these videos very useful while setting up.*
+- https://www.youtube.com/watch?v=K0jA-q3C0Io&list=PLJrz5WYgikAw_INfe028LtPIz8AyDuMbM&index=2
+- https://www.youtube.com/watch?v=yVAFU1M6Auw&list=PLJrz5WYgikAw_INfe028LtPIz8AyDuMbM&index=3
+
+
+### Install HyperV Management Tools
 *Enable iSCSI Disk Support, set failover policy and enable path verification.  Upon completion, server will restart.*
 **Failover Policy Options**
 - **None**: Clears any currently configured default load balance policy.
@@ -61,7 +69,7 @@ Get-iSCSITarget
 
 ### Check Connections for All Nodes
 ```powershell
-Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock{Get-iSCSITarget}
+Invoke-Command -ComputerName $arrayHV -ScriptBlock{Get-iSCSITarget}
 ```
 
 ### Enable Format Drives
@@ -85,3 +93,41 @@ Invoke-Command -ComputerName HYPERV01,HYPERV02 -ScriptBlock{Get-iSCSITarget}
 3. Start-Process Powershell -Verb RunAs
 4. Get-Volume
 5. Set-Volume -DriveLetter # -NewFileSystemLabel "LABELNAME"
+
+### Online Disks for Other Nodes
+1. RDP into node
+2. Get to command line
+3. Enter 'diskpart'
+4. list disk
+5. select disk #
+6. online disk
+7. repeat for each offline disk on each node
+
+# Configure HyperV Nodes
+
+### Setup HyperV Host
+*Install necessary features*
+```powershell
+Invoke-Command -ComputerName $arrayHV -ScriptBlock {Install-WindowsFeature Hyper-V, Failover-Clustering -IncludeAllSubFeature -IncludeManagementTools -Restart}
+```
+
+*Run prevalidation and fix any warnings*
+```powershell
+Test-Cluster -Node $arrayHV -Verbose
+```
+
+*Create Cluster*
+- Did not work when I tried to run remotely.  Worked when remoted into one of the HyperV Nodes.
+```powershell
+$NAME = Read-Host -Prompt "Enter Cluster Name"
+$IP = Read-Host -Prompt "Enter Cluster Management IP"
+New-Cluster -Name $NAME -Node $arrayHV -StaticAddress $IP.ToString()
+```
+
+### Configure Cluster
+1. Open Failover Cluster Manager on your workstation.
+2. Connect to the IP you set when creating the cluster.
+3. Right click on the cluster name --> More Actions --> Configure Cluster Quorum Settings.
+4. Use Default unless you know why and how to do the other options already.
+
+***More Steps to Come***
