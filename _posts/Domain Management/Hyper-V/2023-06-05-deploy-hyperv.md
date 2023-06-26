@@ -131,3 +131,48 @@ New-Cluster -Name $NAME -Node $arrayHV -StaticAddress $IP.ToString()
 4. Use Default unless you know why and how to do the other options already.
 
 ***More Steps to Come***
+
+### HyperV Replication
+*You first need to give the cluster permissions in AD*
+1. Navigate to the OU that contains HyperV resources, specifically the cluster itself.
+2. Right click the OU and select Delegate Control.
+3. At Users or Groups click Add and then Object Types.
+4. Check Computers object type and click okay.
+5. Now add the Cluster name.
+6. Select Create a custom task to delegate and click next.
+7. Select Only the following obects in the folder: --> check Computer obects.
+8. Also check Create selected objects in this folder and click next.
+9. Select General, Property-Specific and give Write permissions.  Click next.
+10. The HyperV Cluster should now be able to create a replication broker.
+
+*Create Replication Broker*
+1. Open HyperV Manager and right click on the server node
+2. Select Hyper-V Settings
+3. Under Server, select Replication Configuration
+4. Check Enable this computer as a replica server.
+5. Enable HTTP (port 80) for demo.  Setup HTTPS (port 443) for production.
+6. Allow replication from an authenticated server
+7. Select a volume from ClusterStorage
+
+
+
+
+### These steps may not have been necessary
+*Check if ports are open*
+```powershell
+foreach ($item in $arrayHV) {
+Test-NetConnection -Port 80 -Computer $item
+}
+```
+```powershell
+foreach ($item in $arrayHV) {
+Test-NetConnection -Port 443 -Computer $item
+}
+```
+*Open Ports*
+```powershell
+Invoke-Command -ComputerName $arrayHV -ScriptBlock {New-NetFirewallRule -DisplayName "Allow HTTP Inbound" -Direction Inbound -LocalPort 80 -Protocol TCP -Action Allow}
+```
+```powershell
+Invoke-Command -ComputerName $arrayHV -ScriptBlock {New-NetFirewallRule -DisplayName "Allow HTTPS Inbound" -Direction Inbound -LocalPort 443 -Protocol TCP -Action Allow}
+```
