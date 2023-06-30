@@ -133,6 +133,8 @@ New-Cluster -Name $NAME -Node $arrayHV -StaticAddress $IP.ToString()
 ***More Steps to Come***
 
 ### HyperV Replication
+Use this if you have critical VMs and at least two HyperV Clusters.  This will allow for replication between the clusters in the event the primary cluster has a disaster, you can instantly recover by running the VMs on the backup cluster.  It does what the name suggest, creates an exact replica ready for use at any time on the other cluster.  Think of it like clustering clusters.
+
 *You first need to give the cluster permissions in AD*
 1. Navigate to the OU that contains HyperV resources, specifically the cluster itself.
 2. Right click the OU and select Delegate Control.
@@ -157,7 +159,7 @@ New-Cluster -Name $NAME -Node $arrayHV -StaticAddress $IP.ToString()
 
 
 
-### These steps may not have been necessary
+### These steps may not have been necessary but I have not run this without using them
 *Check if ports are open*
 ```powershell
 foreach ($item in $arrayHV) {
