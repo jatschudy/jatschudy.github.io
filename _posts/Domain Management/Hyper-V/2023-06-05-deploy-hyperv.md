@@ -28,6 +28,13 @@ $arrayHV = @("NODE01","NODE02","NODE03")
 - https://www.youtube.com/watch?v=K0jA-q3C0Io&list=PLJrz5WYgikAw_INfe028LtPIz8AyDuMbM&index=2
 - https://www.youtube.com/watch?v=yVAFU1M6Auw&list=PLJrz5WYgikAw_INfe028LtPIz8AyDuMbM&index=3
 
+### Install Windows Features
+```powershell
+Install-WindowsFeature -Name Hyper-V -IncludeManagementTools -Restart
+```
+```powershell
+Install-WindowsFeauture -Name MultiPath-IO
+```
 
 ### Install HyperV Management Tools
 *Enable iSCSI Disk Support, set failover policy and enable path verification.  Upon completion, server will restart.*
