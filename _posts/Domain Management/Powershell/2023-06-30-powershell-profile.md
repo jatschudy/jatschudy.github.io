@@ -18,10 +18,22 @@ notepad $PROFILE
 ```
 
 ### My Profile Script
+*Change variables to current settings.*
 ```powershell
-$USER = (Get-ChildItem Env:\USERNAME).value
-$PATH = "C:\Users\$USER\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"
-$env = "C:\Users\$USER\.env" | Out-String | ConvertFrom-StringData
-Add-Content -Path $PATH -Value $env
-Add-Content -Path $PATH -Value "TEST"
+# Primary Domain Controller
+$PRIMARY_DC="DC Name"
+
+# Primary File Server
+$PRIMARY_FS="FS Name"
+
+# iSCSI Info
+$PORTAL_ADDRESS="IP Address"
+
+# Marketing Array
+$arrayMarketing=@('email1@example.com','email2@eample.com')
+
+# HyperV Node Array
+$arrayHV = @('node1','node2')
+
+write-host "Environment Variables Loaded"
 ```
