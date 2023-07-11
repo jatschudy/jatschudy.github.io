@@ -6,9 +6,9 @@ tags: [powershell,script,file server,file system,storage use]
 ---
 
 ### List size of each directory at the entered path
-*Use this one if you have environment variables set*
+*Use this one if you have profile variables set*
 ```powershell
-Enter-PSSession -ComputerName $env.PRIMARY_FS
+Enter-PSSession -ComputerName $PRIMARY_FS
 $PATH = Read-Host -Prompt "Enter Directory Path"
 $ARRAY = Get-ChildItem -Path $PATH | Where-Object {$_.PSIsContainer -eq $true}
 foreach ($item in $ARRAY) {

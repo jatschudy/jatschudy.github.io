@@ -118,7 +118,7 @@ Invoke-Command -ComputerName $arrayHV -ScriptBlock{Get-iSCSITarget}
 Invoke-Command -ComputerName $arrayHV -ScriptBlock {Install-WindowsFeature Hyper-V, Failover-Clustering -IncludeAllSubFeature -IncludeManagementTools -Restart}
 ```
 
-*Run prevalidation and fix any warnings*
+*Run pre-validation and fix any warnings*
 ```powershell
 Test-Cluster -Node $arrayHV -Verbose
 ```

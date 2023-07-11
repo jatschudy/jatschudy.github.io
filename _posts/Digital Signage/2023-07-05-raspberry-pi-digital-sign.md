@@ -16,7 +16,7 @@ nano .config/lxsession/LXDE-pi/autostart
 ```
 
 *Then add these lines replacing <WEBURL> with the correct address*
-```txt
+```ini
 @unclutter -idle 0
 @xset s off
 @xset -dpms
