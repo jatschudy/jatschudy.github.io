@@ -3,7 +3,7 @@
 
 ```powershell
 # Connect to the Domain Controller
-Enter-PSSession -ComputerName $env.PRIMARY_DC;
+Enter-PSSession -ComputerName $PRIMARY_DC;
 
 # Import necessary module
 Import-Module ActiveDirectory
@@ -33,25 +33,25 @@ Add-ADGroupMember "Default Group" $USERNAME;
 Set-ADUser -Identity $USERNAME -GivenName $first;
 Set-ADUser -Identity $USERNAME -Surname $last;
 Set-ADUser -Identity $USERNAME -Description $TITLE;
-Set-ADUser -Identity $USERNAME -Office $env.OFFICE;
-Set-ADUser -Identity $USERNAME -EmailAddress $USERNAME$env.MAIL_DOMAIN;
-Set-ADUser -Identity $USERNAME -HomePage $env.HOMEPAGE;
+Set-ADUser -Identity $USERNAME -Office $OFFICE;
+Set-ADUser -Identity $USERNAME -EmailAddress $USERNAME$MAIL_DOMAIN;
+Set-ADUser -Identity $USERNAME -HomePage $HOMEPAGE;
 
 # Address Tab
-Set-ADUser -Identity $USERNAME -StreetAddress $env.STREEADDRESS;
-Set-ADUser -Identity $USERNAME -City $env.CITY;
-Set-ADUser -Identity $USERNAME -State $env.STATE;
-Set-ADUser -Identity $USERNAME -PostalCode $env.ZIP;
+Set-ADUser -Identity $USERNAME -StreetAddress $STREETADDRESS;
+Set-ADUser -Identity $USERNAME -City $CITY;
+Set-ADUser -Identity $USERNAME -State $STATE;
+Set-ADUser -Identity $USERNAME -PostalCode $ZIP;
 # Set-ADUser -Identity $USERNAME -Country 'United States'; --Needs Fixed
 
 # Account Tab
-Set-ADUser -Identity $USERNAME -UserPrincipalName $USERNAME$env.MAIL_DOMAIN;
+Set-ADUser -Identity $USERNAME -UserPrincipalName $USERNAME$MAIL_DOMAIN;
 Set-ADUser -Identity $USERNAME -PasswordNeverExpires 1;
 
 # Organization Tab
 Set-ADUser -Identity $USERNAME -Title $TITLE;
 set-ADUser -Identity $USERNAME -Department $DEPT;
-Set-ADUser -Identity $USERNAME -Company $env.COMPANY;
+Set-ADUser -Identity $USERNAME -Company $COMPANY;
 # Set Manager not added yet
 
 # Move User to proper OU, Not added yet.

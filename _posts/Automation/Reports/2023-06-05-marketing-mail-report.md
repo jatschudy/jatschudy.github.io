@@ -13,15 +13,15 @@ Run once for each account wanted.  It will compile all emails sent from that acc
 Connect-ExchangeOnline
 
 #arrayMarketing variable is stored in powershell launch profile
-
 $i = 1
+$days = Read-Host -Prompt "How many days back?"
 
 foreach ($item in $arrayMarketing) {
 write-host ("Starting trace of $item")
 # Set Parameters
 $SEND = $item
 $endDate = (Get-Date).Date
-$startDate = ($endDate).AddDays(-6)
+$startDate = ($endDate).AddDays(-$days)
 $pageSize = 5000
 $maxPage = 1000
 
