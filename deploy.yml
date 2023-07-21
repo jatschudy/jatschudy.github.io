@@ -1,5 +1,5 @@
-- hosts: "Webservers"
+- hosts: "nginx"
   become: yes
   tasks:
   - name: Deploy Website
-    copy: src=_site/ dest=/home/dev/sites/pugsnot.org
+    copy: src=_site/ dest=/home/pugtech/techjournal
