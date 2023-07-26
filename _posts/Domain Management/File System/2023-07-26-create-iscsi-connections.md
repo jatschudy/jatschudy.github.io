@@ -1,6 +1,6 @@
 ---
 title: Create iSCSI Connections
-date: 2023-07-25 08:35:00 -0500
+date: 2023-07-26 08:35:00 -0500
 categories: [Domain Management,File System]
 tags: [powershell,script,file server,file system,storage use,failover,iscsi]
 ---
@@ -39,15 +39,14 @@ Get-IscsiTarget
 ```powershell
 $ipAddress = Read-Host -Prompt "Enter Initiator Address"
 $targetAddress = Read-Host -Prompt "Enter Target IP Address"
-Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:quorum -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
-Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:storage -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
+Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:witness -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
 Get-iSCSIsession | Register-iSCSIsession
 Get-iSCSITarget
 ```
 
 ### Check Connections for All Nodes
 ```powershell
-Invoke-Command -ComputerName $arrayHV -ScriptBlock{Get-iSCSITarget}
+Invoke-Command -ComputerName $array@@ -ScriptBlock{Get-iSCSITarget}
 ```
 
 ### Enable Format Drives
