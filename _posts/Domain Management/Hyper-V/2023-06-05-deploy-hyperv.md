@@ -93,6 +93,10 @@ Invoke-Command -ComputerName $arrayHV -ScriptBlock{Get-iSCSITarget}
 5. clean
 6. create partition primary
 7. format fs=ntfs
+8. list volume
+9. select volume #
+10. assign letter=x
+
 
 *Label the drive with these commands. '#' represents the correct letter.*
 1. Exit
@@ -100,6 +104,9 @@ Invoke-Command -ComputerName $arrayHV -ScriptBlock{Get-iSCSITarget}
 3. Start-Process Powershell -Verb RunAs
 4. Get-Volume
 5. Set-Volume -DriveLetter # -NewFileSystemLabel "LABELNAME"
+
+*Return to diskpart and remove the volume label*
+1. remove letter #
 
 ### Online Disks for Other Nodes
 1. RDP into node
