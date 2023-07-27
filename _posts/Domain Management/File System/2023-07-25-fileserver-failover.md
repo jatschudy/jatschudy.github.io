@@ -52,5 +52,18 @@ New-Cluster -Name $NAME -Node $arrayFS -StaticAddress $IP.ToString()
 ```
 
 ### Configure Failover Cluster
-1. On a workstation, open Failover Cluster Manager
-2. Right click on Roles, select File Server
+***I gave the cluster AD item full control over all nodes in the cluster, this may not be necessary***
+1. Open AD and navigate to the cluster name
+2. Make cluster a member of Administrators
+3. On a workstation, open Failover Cluster Manager
+4. Connect to the cluster
+5. Right on the cluster name
+6. More Actions --> Configure Cluster Quorum Settings
+7. Leave all settings default and select the Quorum disk you attached earlier
+8. Back to Failover Cluster Manger
+9. Right click on Roles --> Configure Roles
+10. Select File Server
+11. Follow the prompts leaving settings default where possible.
+
+
+
