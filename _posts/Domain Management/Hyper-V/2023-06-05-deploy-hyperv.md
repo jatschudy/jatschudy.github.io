@@ -64,7 +64,7 @@ Get-IscsiTargetPortal | Update-IscsiTargetPortal
 Get-IscsiTarget
 ```
 
-*Make the Connections*
+*Make the Connections. Change nodeaddress to match your setup.  Mine is using two an iSCSI TrueNAS Scale target*
 ```powershell
 $ipAddress = Read-Host -Prompt "Enter Initiator Address"
 $targetAddress = Read-Host -Prompt "Enter Target IP Address"
