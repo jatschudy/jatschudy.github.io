@@ -33,7 +33,7 @@ $arrayHV = @("NODE01","NODE02","NODE03")
 Install-WindowsFeature -Name Hyper-V -IncludeManagementTools -Restart
 ```
 ```powershell
-Install-WindowsFeauture -Name MultiPath-IO
+Install-WindowsFeature -Name MultiPath-IO
 ```
 
 ### Install HyperV Management Tools
@@ -68,7 +68,7 @@ Get-IscsiTarget
 ```powershell
 $ipAddress = Read-Host -Prompt "Enter Initiator Address"
 $targetAddress = Read-Host -Prompt "Enter Target IP Address"
-Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:quorum -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
+Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:quorum-hv -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
 Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:vm-storage -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
 Get-iSCSIsession | Register-iSCSIsession
 Get-iSCSITarget
