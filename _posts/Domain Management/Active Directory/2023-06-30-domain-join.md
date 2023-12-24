@@ -39,3 +39,8 @@ ufw allow samba
 realm discover "$domain"
 realm join "$domain"
 ```
+Add groups to Sudoers
+```bash
+read -p "Enter group@domain: " group
+echo "$group ALL=(ALL:ALL) ALL" >> /etc/sudoers
+```
