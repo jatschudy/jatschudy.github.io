@@ -27,3 +27,15 @@ $NAME = switch ($compInfo.Name) {
 $USER = Read-Host -Prompt "Enter Assigned User (Last, First)"
 Set-ADComputer -Identify $PCName -Description $USER+" | WIN11 | "+$NAME
 ```
+
+### Join Debian Installation to Domain
+Elevate to sudo priviledges before starting.
+```bash
+read -p "Enter Domain: " domain
+apt update && apt full-upgrade -y
+apt install realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin oddjob oddjob-mkhomedir packagekit samba -y
+apt update && apt upgrade -y
+ufw allow samba
+realm discover "$domain"
+realm join "$domain"
+```

@@ -1,6 +1,6 @@
 ---
 title: Docker Host Deployment
-date: 2023-12-23 20:00:00 -0500
+date: 2023-12-23 13:45:12 -0500
 categories: [Deployments,Docker]
 tags: [debian,domain join,terminal,script,docker]
 ---
@@ -12,7 +12,7 @@ This guide configures a docker host on a Debian installation. It should work on 
 Run updates and install SSH, FTP and a firewall.
 ```bash
 sudo apt update && sudo apt upgrade -y
-sudo apt install openssh-server vfstpd ufw -y
+sudo apt install openssh-server vsftpd ufw -y
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow ssh
