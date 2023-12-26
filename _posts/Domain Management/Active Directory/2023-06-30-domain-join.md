@@ -43,5 +43,5 @@ sed -i '/nss,/a default_domain_suffix = CONTOSO.COM' /etc/sssd/sssd.conf
 Add groups to Sudoers
 ```bash
 read -p "Enter group@domain: " group
-echo "$group ALL=(ALL:ALL) ALL" >> /etc/sudoers
+echo "%$group ALL=(ALL:ALL) ALL" >> /etc/sudoers
 ```
