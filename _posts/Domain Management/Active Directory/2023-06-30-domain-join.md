@@ -38,6 +38,7 @@ apt update && apt upgrade -y
 ufw allow samba
 realm discover "$domain"
 realm join "$domain"
+sed -i '/nss,/a default_domain_suffix = CONTOSO.COM' /etc/sssd/sssd.conf 
 ```
 Add groups to Sudoers
 ```bash
