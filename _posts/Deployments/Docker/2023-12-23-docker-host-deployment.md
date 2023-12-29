@@ -40,3 +40,8 @@ Last install the docker
 ```bash
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 ```
+
+make a docker folder at the root of the filesystem.  Then make it writeable.
+```bash
+sudo chmod -R a+rwx docker
+```
