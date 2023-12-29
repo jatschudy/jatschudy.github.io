@@ -44,5 +44,5 @@ pam-auth-update --enable mkhomedir
 Add groups to Sudoers
 ```bash
 read -p "Enter group@domain: " group
-echo "%$group ALL=(ALL:ALL) ALL" >> /etc/sudoers
+echo "%$group ALL=(ALL) ALL" >> /etc/sudoers
 ```
