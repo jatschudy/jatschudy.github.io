@@ -37,3 +37,8 @@ $arrayHV = @('node1','node2')
 
 write-host "Environment Variables Loaded"
 ```
+
+### Allow scripts to run
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy Remotesigned -Scope LocalMachine
+```
