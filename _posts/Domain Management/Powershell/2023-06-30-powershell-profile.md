@@ -39,6 +39,7 @@ write-host "Environment Variables Loaded"
 ```
 
 ### Allow scripts to run
+*Admin priviledges required*
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy Remotesigned -Scope LocalMachine
 ```
