@@ -139,6 +139,13 @@ $IP = Read-Host -Prompt "Enter Cluster Management IP"
 New-Cluster -Name $NAME -Node $arrayHV -StaticAddress $IP.ToString()
 ```
 
+*Add Node to Cluster*
+- Run on node that is already in the cluster.
+```Powershell
+$node = Read-Host -Prompt "Enter Node Name: "
+Add-ClusterNode -Name $node
+```
+
 ### Configure Cluster
 1. Open Failover Cluster Manager on your workstation.
 2. Connect to the IP you set when creating the cluster.
