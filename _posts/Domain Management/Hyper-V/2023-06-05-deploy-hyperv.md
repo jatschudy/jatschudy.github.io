@@ -93,7 +93,7 @@ Invoke-Command -ComputerName $arrayHV -ScriptBlock{Get-iSCSITarget}
 4. attributes disk clear readonly
 5. clean
 6. create partition primary
-7. format fs=ntfs
+7. format fs=ntfs quick
 8. list volume
 9. select volume #
 10. assign letter=x
