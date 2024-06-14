@@ -68,8 +68,9 @@ Get-IscsiTarget
 ```powershell
 $ipAddress = Read-Host -Prompt "Enter Initiator Address"
 $targetAddress = Read-Host -Prompt "Enter Target IP Address"
-Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:quorum-hv -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
-Connect-iscsitarget -nodeaddress iqn.2005-10.org.freenas.ctl:vm-storage -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
+Connect-iscsitarget -nodeaddress eui.000B5600400273B0 -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
+Connect-iscsitarget -nodeaddress eui.000B5600400273B1 -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
+Connect-iscsitarget -nodeaddress eui.000B5600400273B2 -IsPersistent $true -InitiatorPortalAddress $ipAddress -TargetPortalAddress $targetAddress
 Get-iSCSIsession | Register-iSCSIsession
 Get-iSCSITarget
 ```
